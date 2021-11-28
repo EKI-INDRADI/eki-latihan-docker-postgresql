@@ -1,0 +1,41 @@
+
+mkdir /home/postgres_file_docker_dont_delete
+mkdir /home/postgres_file_docker_dont_delete/data
+chmod 777 -Rv /home/postgres_file_docker_dont_delete
+
+docker pull postgres:13.5
+
+docker container create --name postgres_v13.5_5400  \
+--restart=always  \
+-it  \
+-e POSTGRES_USER=postgres  \
+-e POSTGRES_PASSWORD=masuk123  \
+-e POSTGRES_DB=mydb \
+-p 5400:5432 \
+-v /home/postgres_file_docker_dont_delete:/var/lib/postgresql \
+-v /home/postgres_file_docker_dont_delete/data:/var/lib/postgresql/data \
+postgres:13.5 
+
+EKI NOTE : it = nempel di bash linuxnya
+
+docker container start postgres_v13.5_5400
+
+docker container logs postgres_v13.5_5400
+
+CREATE DATABASE simple_pos
+\c simple_pos 
+
+CREATE TABLE account_testing (
+	user_id serial PRIMARY KEY,
+	username VARCHAR ( 50 ) UNIQUE NOT NULL,
+	password VARCHAR ( 50 ) NOT NULL,
+	email VARCHAR ( 255 ) UNIQUE NOT NULL,
+	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+
+REFERENSI : 
+https://www.postgresqltutorial.com/postgresql-create-table/
+https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
+
